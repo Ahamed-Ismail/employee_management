@@ -5,12 +5,15 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const nodemailer = require("nodemailer");
 const moment = require("moment");
+const requestIp = require('request-ip');
 
 const app = express();
 const port = 5000;
 
 app.use(bodyParser.json());
 app.use(cors());
+app.use(requestIp.mw());
+
 
 const db = mysql.createConnection({
   host: "employeeinstance.cu4aa78nopao.us-east-1.rds.amazonaws.com",
@@ -33,57 +36,63 @@ db.on("error", (err) => {
 
 const adminCredentials = {
   username: "admin",
-  password: "Saran@533",
-  email: "vinay05saran03@gmail.com",
+  password: "12345",
+  email: "ahamedismail09@gmail.com",
 };
 
 // Track login attempts
 let loginAttempts = {};
-
 // Login route
 app.post("/login", (req, res) => {
   const { username, password } = req.body;
+  console.log(loginAttempts);
 
   // Get IP address
   const ip = req.headers["x-forwarded-for"] || req.connection.remoteAddress;
-  console.log("IP:", ip);
-
   // Check if credentials match
   if (
     username == adminCredentials.username &&
     password == adminCredentials.password
   ) {
     // Successful login, grant access
-    res.status(200).send("Login successful");
+    loginAttempts[ip] = 0;
+      res.status(200).send("Login successful");
+    
 
     // Reset login attempts
-    loginAttempts[ip] = 0;
+
+
   } else {
     // Invalid credentials, increment login attempt count
     loginAttempts[ip] = loginAttempts[ip] ? loginAttempts[ip] + 1 : 1;
 
     // Send security alert if login attempts exceed threshold
-    if (loginAttempts[ip] >= 1) {
-      sendSecurityAlert(ip); // Pass user's email address and login attempts to the security alert function
+    if (loginAttempts[ip] >= 3) { // Example threshold, you can set your own threshold
+      sendSecurityAlert(); // Send security alert email
     }
 
+    
+
+
     // Display error message
-    res.status(401).send("Invalid credentials");
+  
+      res.status(400).send("Invalid credentials");
+   
   }
 });
 
 // Function to send security alert email
-function sendSecurityAlert(ip) {
+function sendSecurityAlert() {
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
-      user: "vinay05saran03@gmail.com", // your email
-      pass: "nhhj vwzn tprh jrga", // your password
+      user: "ahamedismailhisamm@gmail.com", // your email
+      pass: "ltqc hkaz dsig yzdi", // your password
     },
   });
 
   const mailOptions = {
-    from: "vinay05saran03@gmail.com",
+    from: "ahamedismailhisamm@gmail.com",
     to: adminCredentials.email, // admin's email
     subject: "Security Alert: Anonymous Login Attempts Detected",
     text: ` login attempt  detected  at  ${new Date()}.`,
@@ -118,13 +127,15 @@ app.post("/api/employees", (req, res) => {
 
   // Calculate age based on the provided date of birth
   const age = moment().diff(dob, "years");
+  console.log(age);
+  const parsedage = parseInt(age);
 
   // Check if age is less than 18
-  if (age < 18) {
-    return res
-      .status(400)
-      .json({ message: "Employee must be at least 18 years old" });
+  if (parsedage < 18) {
+    console.log("in age");
+    return res.status(400).json({ message: "Employee must be at least 18 years old" });
   }
+
 
   // Check if name length and salary length are within limits
   if (name.length > 30 || salary.length > 8) {
