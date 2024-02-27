@@ -1,0 +1,84 @@
+.employee-list-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.list-title {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.employee-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.employee-table th, .employee-table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+}
+
+.employee-table th {
+  background-color: #f2f2f2;
+}
+
+.employee-table td {
+  background-color: #fff;
+}
+
+.employee-table th:first-child,
+.employee-table td:first-child {
+  border-left: none;
+}
+
+.employee-table th:last-child,
+.employee-table td:last-child {
+  border-right: none;
+}
+
+.update-form {
+  background-color: #f0f0f0;
+  padding: 20px;
+  margin-top: 20px;
+  border-radius: 8px;
+}
+
+.update-form h2 {
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.update-form input[type='text'] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.update-form button {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.update-form button:hover {
+  background-color: #0056b3;
+}
+
+.loading, .Error {
+  text-align: center;
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  border-radius: 5px;
+}
